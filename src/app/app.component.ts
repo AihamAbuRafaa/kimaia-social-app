@@ -2,28 +2,24 @@ import { Component, ViewChild } from '@angular/core';
 import { Nav, Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-
-import { HomePage } from '../pages/home/home';
-import { ListPage } from '../pages/list/list';
+import firebase from 'firebase';
+import { AuthService } from '../providers/auth-service/auth-service';
 
 @Component({
   templateUrl: 'app.html'
 })
 export class MyApp {
+  rootPage:string = 'LoginPage';
+  signinpage : string ='SigninPage'
+  isAuthenticated:boolean =false;
+  name:string;
+  user:any;
   @ViewChild(Nav) nav: Nav;
-
-  rootPage: any = HomePage;
-
   pages: Array<{title: string, component: any}>;
-
-  constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen) {
+  constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen,private authSVC : AuthService,) {
     this.initializeApp();
 
     // used for an example of ngFor and navigation
-    this.pages = [
-      { title: 'Home', component: HomePage },
-      { title: 'List', component: ListPage }
-    ];
 
   }
 
@@ -34,11 +30,62 @@ export class MyApp {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
     });
+    this.init()
+    this.getUser();
+    this.getName();
   }
-
-  openPage(page) {
-    // Reset the content nav to have just this page
-    // we wouldn't want the back button to show in this scenario
-    this.nav.setRoot(page.component);
-  }
-}
+  async init(){
+    await firebase.initializeApp({
+      apiKey: "AIzaSyD70V_1gf7lkbw28WNjJxtZ35YmFLbhqUw",
+      authDomain: "kimaia-social-mission.firebaseapp.com",
+      databaseURL: "https://kimaia-social-mission.firebaseio.com",
+      projectId: "kimaia-social-mission",
+      storageBucket: "",
+      messagingSenderId: "143615907120",
+      appId: "1:143615907120:web:5c5b59b753ae923d"
+     });
+     
+ 
+   }
+   logout(){
+     this.authSVC.logout();
+     this.nav.setRoot('LoginPage')
+   }
+ 
+   getName() {
+     return new Promise((resolve, reject) => {
+        firebase.database().ref('/users/').once('value').then(snapshot => {
+         snapshot.forEach(item => {
+           let i=item.val()
+           if(this.user)
+           {
+           if(i.uid==this.user.uid)
+           {
+             this.name=i.name
+             this.authSVC.name=i.name
+           }
+         }
+         });
+       });
+       this.authSVC.name=this.name;
+       resolve(this.name)
+     })
+   }
+ 
+   getUser(){
+      firebase.auth().onAuthStateChanged(user=>{
+       if(user){
+         this.isAuthenticated=true;
+         this.rootPage='MainPage';
+         this.user=user;
+         this.authSVC.uid=user.uid;
+       }
+       else
+       {
+         this.isAuthenticated=false;
+         this.rootPage='LoginPage';
+       }
+     })
+   }
+ }
+ 

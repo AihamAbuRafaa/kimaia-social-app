@@ -1,0 +1,51 @@
+<!-- -->
+<ion-content class="auth-page">
+  <div class="login-content">
+
+    <!-- Logo -->
+    <div padding text-center>
+      <div class="logo"></div>
+      <h2 ion-text class="text-primary">
+        <strong>FS</strong> Just A Start
+      </h2>
+    </div>
+
+    <!-- Login form -->
+    <form #form="ngForm" (submit)="register(form)" class="list-form">
+      <ion-item>
+        <ion-label >
+          <ion-icon name="person" item-start class="text-primary"></ion-icon>
+          Full Name
+        </ion-label>
+        <ion-input name="fullname" ngModel type="text"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label >
+          <ion-icon name="mail" item-start class="text-primary"></ion-icon>
+          Email
+        </ion-label>
+        <ion-input name="email" ngModel type="email"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label >
+          <ion-icon name="lock"  item-start class="text-primary"></ion-icon>
+          Password
+        </ion-label>
+        <ion-input name="password" ngModel type="password"></ion-input>
+      </ion-item>
+      <button ion-button block color="dark" tappable type="submit">
+        <ion-icon name="log-in"></ion-icon>
+        SIGN UP
+      </button>
+    </form>
+
+    
+    <!-- Other links -->
+    <div text-center margin-top>
+      <span ion-text color="primary" tappable (click)="login()">I have an account</span>
+    </div>
+
+  </div>
+</ion-content>

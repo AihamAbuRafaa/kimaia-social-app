@@ -1,5 +1,7 @@
 {
   "name": "kimaia-social-mission",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "ionic-angular"
 }

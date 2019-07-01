@@ -1,0 +1,29 @@
+page-main {
+    #topSection>ion-card>ion-card-header {
+        width: 100%;
+    }
+
+    #userAvatar {
+        width: 50px;
+        height: 50px;
+    }
+
+    #topSection>ion-card>ion-card-header>ion-item>ion-list {
+        width: 100%;
+    }
+
+    #topSection>ion-card>ion-card-header>ion-item>ion-list>ion-item>ion-textarea {
+        height: 150px;
+    }
+
+    #userAvatarContainer {
+        vertical-align: middle !important;
+    }
+
+    ion-row {
+        ion-textarea {
+            border: solid 1px black;
+            border-color: map-get($map:$colors, $key:primary );
+        }
+    }
+}
