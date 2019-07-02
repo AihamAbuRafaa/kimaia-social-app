@@ -10,6 +10,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { Firebase } from '@ionic-native/firebase';
 import { AuthService } from '../providers/auth-service/auth-service';
 import { PostsService } from '../providers/posts-service/posts-service';
+import { UsersService } from '../providers/users-service/users-service';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import { PostsService } from '../providers/posts-service/posts-service';
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     AuthService,
-    PostsService
+    PostsService,
+    UsersService
   ]
 })
 export class AppModule {}

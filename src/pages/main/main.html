@@ -33,13 +33,13 @@
     
         </ion-card>
       </div>
-    <ion-card>
+    <ion-card *ngFor="let post of cachedPosts">
         <ion-item>
-          <h2>Marty McFly</h2>
-          <p>November 5, 1955</p>
+          <h2>{{post.author}}</h2>
+          <p>{{post.dateTime}}</p>
         </ion-item>
         <ion-card-content>
-          <p>Wait a minute. Wait a minute, Doc. Uhhh... Are you telling me that you built a time machine... out of a DeLorean?! Whoa. This is heavy.</p>
+          <p>{{post.text}}</p>
         </ion-card-content>
         <ion-row>
           <ion-col align-self-center text-right>

@@ -87,5 +87,10 @@ export class MyApp {
        }
      })
    }
+
+   manageFriends()
+   {
+     this.nav.push('ManageFriendsPage')
+   }
  }
  

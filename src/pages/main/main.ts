@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { IonicPage, NavController, NavParams, MenuController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, MenuController, LoadingController } from 'ionic-angular';
 import { PostsService, Post } from '../../providers/posts-service/posts-service';
 import { AuthService } from '../../providers/auth-service/auth-service';
 
@@ -18,23 +18,36 @@ import { AuthService } from '../../providers/auth-service/auth-service';
 export class MainPage implements OnInit {
   newPost: Post = {
     dateTime: "",
-    author:"",
+    author: "",
     text: "",
     uid: ""
   }
-  cachedPosts:Post[];
-  constructor(public navCtrl: NavController, public navParams: NavParams, private menu: MenuController, private postSvc: PostsService, private authSvc: AuthService) {
+  cachedPosts: Post[];
+  constructor(public navCtrl: NavController,
+     public navParams: NavParams,
+      private menu: MenuController,
+       private postSvc: PostsService,
+        private authSvc: AuthService,
+        private loadCtrl:LoadingController) {
   }
   async ngOnInit() {
-    let i=await this.postSvc.getCachedPosts()
-    console.log(i)
+    let load=this.loadCtrl.create();
+    load.present();
+    try {
+      let a = await this.postSvc.getPosts();
+      this.cachedPosts =await this.postSvc.getCachedPosts();
+    } catch (err) {
+      console.log(err)
+    }finally{
+      load.dismiss();
+    }
   }
   sharePost() {
     if (this.newPost.text) {
       let dateTime = new Date().toString();
       this.newPost.dateTime = dateTime;
       this.newPost.uid = this.authSvc.uid;
-      this.newPost.author=this.authSvc.name;
+      this.newPost.author = this.authSvc.name;
       this.postSvc.sharePost(this.newPost);
     }
   }

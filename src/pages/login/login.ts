@@ -41,7 +41,7 @@ export class LoginPage implements OnInit {
     this.authSVC.signin(form.value.email,form.value.password).then(
       data=>{
         loading.dismiss();
-        this.nav.setRoot('HomePage')
+        this.nav.setRoot('MainPage')
       })
       .catch(error=>{
         loading.dismiss();

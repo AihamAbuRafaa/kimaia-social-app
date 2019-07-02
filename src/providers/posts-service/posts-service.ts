@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import firebase from 'firebase';
 import { AngularFireDatabase } from '@angular/fire/database';
+import { AuthService } from '../auth-service/auth-service';
 /*
   Generated class for the PostsServiceProvider provider.
 
@@ -9,8 +10,8 @@ import { AngularFireDatabase } from '@angular/fire/database';
 */
 @Injectable()
 export class PostsService {
-  cachedPosts: Post[]=[];
-  constructor(private adb: AngularFireDatabase) {
+  cachedPosts: Post[] = [];
+  constructor(private adb: AngularFireDatabase,private authSvc:AuthService) {
 
   }
 
@@ -28,25 +29,20 @@ export class PostsService {
   }
 
   async getPosts() {
-    return new Promise((resolve, reject) => {
-      firebase.database().ref('/posts/').once('value').then(snapshot => {
-        if (snapshot) {
+    return new Promise(async(resolve, reject) => {
+      await firebase.database().ref('/posts/').once('value').then(snapshot => {
+        this.cachedPosts=[]
           snapshot.forEach(item => {
-            if (item) {
-              var itemVal = item.val();
-              if (itemVal) {
-                this.cachedPosts.push(itemVal)
-              }
-            }
-          });
-        }
+          var itemVal = item.val();
+          this.cachedPosts.push(itemVal)
+        });
       });
       resolve(this.cachedPosts)
     })
   }
-  async getCachedPosts()
-  {
-    return this.cachedPosts;
+  async getCachedPosts() {
+    let uid=this.authSvc.uid;
+    return this.cachedPosts.filter(i=>i.uid!=uid);
   }
 }
 
