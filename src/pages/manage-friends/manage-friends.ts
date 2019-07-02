@@ -15,38 +15,69 @@ import { UsersService, User } from '../../providers/users-service/users-service'
   templateUrl: 'manage-friends.html',
 })
 export class ManageFriendsPage implements OnInit {
-  users:User[]=[];
-  constructor(public navCtrl: NavController, 
+  users: User[] = [];
+  friends:any[]=[];
+  constructor(public navCtrl: NavController,
     public navParams: NavParams,
-    private usersSvc:UsersService,
-    private loadCtrl:LoadingController) {
+    private usersSvc: UsersService,
+    private loadCtrl: LoadingController) {
   }
 
-  async ngOnInit(){
-    let load=this.loadCtrl.create();
+  async ngOnInit() {
+    let load = this.loadCtrl.create();
     load.present();
-    try{
-    await this.usersSvc.getUsers()
-    this.users=await this.usersSvc.getCahcedUsers();
-    }catch(err){
+    try {
+      this.users = await this.usersSvc.getCahcedUsers();
+      this.friends=await this.usersSvc.friends;
+      this.users=this.users.filter(i=>{
+        let uid =i.uid;
+        let flag=true;
+        this.friends.forEach(d=>{
+          if(uid==d.friendId){
+            flag=false;
+          }else
+          {
+            flag=true;
+          }
+        })
+        return flag;
+      })
+      this.friends=this.friends.filter(i=>{
+        if(i.isAccept==false&&i.isRequest==true)
+        {
+          return true;
+        }
+        else
+        {
+          return false;
+        }
+      })
+    } catch (err) {
       console.log(err)
-    }finally{
+    } finally {
       load.dismiss();
     }
   }
 
-  async addFriend(friend:User)
-  {
-    let load=this.loadCtrl.create();
+  async addFriend(friend: User) {
+    let load = this.loadCtrl.create();
     load.present();
-    try{
+    try {
       await this.usersSvc.addFriend(friend);
-      this.users=this.users.filter(i=>i.uid!=friend.uid)
-    }catch(err)
-    {
+      this.users = this.users.filter(i => i.uid != friend.uid)
+    } catch (err) {
       console.log(err)
-    }finally{
+    } finally {
       load.dismiss();
+    }
+  }
+  acceptOrRejectRequest(friend:User,flag:boolean){
+    if(flag==true)//accept
+    {
+      this.usersSvc.acceptFriend(friend)
+    }else //reject
+    {
+      this.usersSvc.rejectFriend(friend)
     }
   }
 

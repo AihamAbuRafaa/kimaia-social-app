@@ -1,45 +1,26 @@
-<ion-menu [content]="content" type="overlay">
+<ion-menu [content]="content" type="overlay" >
   <ion-header>
-    <ion-toolbar class="user-profile">
-
+    <ion-toolbar class="user-profile" color="primary">
       <ion-grid>
-        <ion-row>
-            <h2 ion-text class="no-margin bold text-white">
-             Hey, {{name}}
-            </h2>
-        </ion-row>
-
         <ion-row no-padding class="other-data">
           <ion-col *ngIf="isAuthenticated" no-padding class="column">
-            <button ion-button icon-left small full color="light" menuClose (click)="logout()">
+            <button ion-button icon-left small full color="danger" menuClose (click)="logout()">
               <ion-icon name="log-out"></ion-icon>
               Log Out
             </button>
           </ion-col>
         </ion-row>
-
+        <ion-row no-padding class="other-data" color="primary">
+          <ion-col *ngIf="isAuthenticated" no-padding class="column">
+            <button ion-button icon-left small full color="light" menuClose (click)="manageFriends()">
+              <ion-icon name="photos"></ion-icon>
+              Manage friends
+            </button>
+          </ion-col>
+        </ion-row>
       </ion-grid>
-
-    </ion-toolbar>
-    <ion-row no-padding class="other-data">
-      <ion-col *ngIf="isAuthenticated" no-padding class="column">
-        <button ion-button icon-left small full color="light" menuClose (click)="manageFriends()">
-          <ion-icon name="photos"></ion-icon>
-          Manage friends
-        </button>
-      </ion-col>
-    </ion-row>
-  </ion-header>
-  <ion-content color="primary" class="linearbg">
-    <ion-list class="user-list">
-      <button ion-item menuClose class="text-1x" *ngFor="let menuItem of appMenuItems" (click)="openPage(menuItem)">
-        <ion-icon item-left [name]="menuItem.icon" color="primary"></ion-icon>
-        <span ion-text color="primary">{{menuItem.title}}</span>
-      </button>
-    </ion-list>
-  </ion-content>
-
+    </ion-toolbar >
+    </ion-header>
 </ion-menu>
-
 <!-- Disable swipe-to-go-back because it's poor UX to combine STGB with side menus -->
 <ion-nav [root]="rootPage" #content swipeBackEnabled="false"></ion-nav>

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { IonicPage, NavController, NavParams, MenuController, LoadingController } from 'ionic-angular';
 import { PostsService, Post } from '../../providers/posts-service/posts-service';
 import { AuthService } from '../../providers/auth-service/auth-service';
+import { UsersService } from '../../providers/users-service/users-service';
 
 /**
  * Generated class for the MainPage page.
@@ -28,13 +29,16 @@ export class MainPage implements OnInit {
     private menu: MenuController,
     private postSvc: PostsService,
     private authSvc: AuthService,
-    private loadCtrl: LoadingController) {
+    private loadCtrl: LoadingController,
+    private usersSvc:UsersService) {
   }
   async ngOnInit() {
     let load = this.loadCtrl.create();
     load.present();
     try {
-      let a = await this.postSvc.getPosts();
+      await this.usersSvc.getUsers();
+      await this.usersSvc.getFriends();
+      await this.postSvc.getPosts();
       this.cachedPosts = await this.postSvc.getCachedPosts();
     } catch (err) {
       console.log(err)

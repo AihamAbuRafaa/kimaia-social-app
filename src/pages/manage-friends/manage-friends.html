@@ -11,6 +11,23 @@
 </ion-header>
 
 <ion-content padding>
+    <ion-card *ngFor="let friend of friends">
+        <ion-item>
+          <h1>{{friend.friendName}}</h1>
+        </ion-item>  
+        <ion-row>
+          <ion-item>
+            <button (click)="acceptOrRejectRequest(friend,true)"ion-button icon-start clear small item-right>
+              <ion-icon name="checkmark"></ion-icon>
+              <div>Accept</div>
+            </button>
+            <button (click)="acceptOrRejectRequest(friend,false)"ion-button icon-start color="danger" clear small item-right>
+                <ion-icon name="close"></ion-icon>
+                <div>Reject</div>
+              </button>
+          </ion-item>
+        </ion-row>
+      </ion-card>    
   <ion-card *ngFor="let user of users">
     <ion-item>
       <h1>{{user.name}}</h1>

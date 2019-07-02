@@ -4,6 +4,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import firebase from 'firebase';
 import { AuthService } from '../providers/auth-service/auth-service';
+import { UsersService } from '../providers/users-service/users-service';
 
 @Component({
   templateUrl: 'app.html'
@@ -16,14 +17,14 @@ export class MyApp {
   user:any;
   @ViewChild(Nav) nav: Nav;
   pages: Array<{title: string, component: any}>;
-  constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen,private authSVC : AuthService,) {
+  constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen,private authSVC : AuthService) {
     this.initializeApp();
 
     // used for an example of ngFor and navigation
 
   }
 
-  initializeApp() {
+  async initializeApp() {
     this.platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
