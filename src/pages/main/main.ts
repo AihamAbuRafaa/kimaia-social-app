@@ -24,31 +24,40 @@ export class MainPage implements OnInit {
   }
   cachedPosts: Post[];
   constructor(public navCtrl: NavController,
-     public navParams: NavParams,
-      private menu: MenuController,
-       private postSvc: PostsService,
-        private authSvc: AuthService,
-        private loadCtrl:LoadingController) {
+    public navParams: NavParams,
+    private menu: MenuController,
+    private postSvc: PostsService,
+    private authSvc: AuthService,
+    private loadCtrl: LoadingController) {
   }
   async ngOnInit() {
-    let load=this.loadCtrl.create();
+    let load = this.loadCtrl.create();
     load.present();
     try {
       let a = await this.postSvc.getPosts();
-      this.cachedPosts =await this.postSvc.getCachedPosts();
+      this.cachedPosts = await this.postSvc.getCachedPosts();
     } catch (err) {
       console.log(err)
-    }finally{
+    } finally {
       load.dismiss();
     }
   }
   sharePost() {
-    if (this.newPost.text) {
-      let dateTime = new Date().toString();
-      this.newPost.dateTime = dateTime;
-      this.newPost.uid = this.authSvc.uid;
-      this.newPost.author = this.authSvc.name;
-      this.postSvc.sharePost(this.newPost);
+    let load = this.loadCtrl.create();
+    load.present();
+    try {
+      if (this.newPost.text) {
+        let dateTime = new Date().toString();
+        this.newPost.dateTime = dateTime;
+        this.newPost.uid = this.authSvc.uid;
+        this.newPost.author = this.authSvc.name;
+        this.postSvc.sharePost(this.newPost);
+        this.newPost.text = ""
+      }
+    } catch (err) {
+      console.log(err)
+    } finally {
+      load.dismiss();
     }
   }
 }
