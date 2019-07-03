@@ -7,13 +7,22 @@ export class AuthService {
   name: string;
   uid: string;
   user: User = {
-    firends: [],
+    friends: [],
     name: "",
     posts: [],
     uid: ""
   }
   constructor() {
-
+    firebase.initializeApp({
+      apiKey: "AIzaSyD70V_1gf7lkbw28WNjJxtZ35YmFLbhqUw",
+      authDomain: "kimaia-social-mission.firebaseapp.com",
+      databaseURL: "https://kimaia-social-mission.firebaseio.com",
+      projectId: "kimaia-social-mission",
+      storageBucket: "",
+      messagingSenderId: "143615907120",
+      appId: "1:143615907120:web:5c5b59b753ae923d"
+    })
+    
   }
 
   signup(email: string, password: string) {

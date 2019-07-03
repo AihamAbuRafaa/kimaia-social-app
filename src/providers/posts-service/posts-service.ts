@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
 import firebase from 'firebase';
-import { AngularFireDatabase } from '@angular/fire/database';
 import { AuthService } from '../auth-service/auth-service';
 import { UsersService } from '../users-service/users-service';
-import { ThrowStmt } from '@angular/compiler';
 /*
   Generated class for the PostsServiceProvider provider.
 
@@ -14,7 +12,7 @@ import { ThrowStmt } from '@angular/compiler';
 export class PostsService {
   cachedPosts: Post[] = [];
   i = 0;
-  constructor(private adb: AngularFireDatabase, private authSvc: AuthService, private usersSvc: UsersService) {
+  constructor(private authSvc: AuthService, private usersSvc: UsersService) {
 
   }
 
@@ -23,7 +21,7 @@ export class PostsService {
       let usersKeys = this.usersSvc.usersKeys;
       let users = this.usersSvc.users;
       let index = users.findIndex(i => i.uid == this.authSvc.uid)
-      let data = await this.adb.list("users/" + usersKeys[index] + "/posts/").push({
+      let data = await firebase.database().ref("users/" + usersKeys[index] + "/posts/").push({
         author: post.author,
         text: post.text,
         dateTime: post.dateTime,
@@ -34,30 +32,27 @@ export class PostsService {
     }
   }
 
-  async getPosts() {
-    return new Promise(async (resolve, reject) => {
-      if (this.i == 0) {
-          this.i++;
-        if (this.usersSvc.usersKeys)
-        this.usersSvc.usersKeys.forEach(async i => {
-          await firebase.database().ref('/users/' + i + '/posts/').once('value').then(snapshot => {
-            snapshot.forEach(item => {
-              var itemVal = item.val();
-              this.cachedPosts.push(itemVal)
-            });
-          });
-          resolve(this.cachedPosts)
-        })
-      }else
-      {
-        resolve(this.cachedPosts)
-      }
+  getPosts() {
+    let friends = this.usersSvc.getCachedFriends()
+    let users = this.usersSvc.getChacedUsers()
+    friends.forEach(friend => {
+      users.forEach(user => {
+        if (user) {
+          if (friend.friendId == user.uid && friend.isAccept == true) {
+            if (user.posts) {
+              Object.values(user.posts).forEach(post => {
+                this.cachedPosts.push(post);
+              })
+            }
+          }
+        }
+      });
     })
 
   }
   async getCachedPosts() {
     let uid = this.authSvc.uid;
-    return await this.cachedPosts.filter(i => i.uid != uid);
+    return this.cachedPosts;
   }
 }
 
@@ -66,4 +61,10 @@ export interface Post {
   author: string;
   text: string;
   dateTime: string;
+}
+export interface IPost {
+  uid: string;
+  author: string;
+  text: string;
+  dateTime: Date;
 }

@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { IonicPage, NavController, NavParams, MenuController, LoadingController } from 'ionic-angular';
-import { PostsService, Post } from '../../providers/posts-service/posts-service';
+import { IonicPage, NavController, NavParams, MenuController, LoadingController, SelectPopover } from 'ionic-angular';
+import { PostsService, Post, IPost } from '../../providers/posts-service/posts-service';
 import { AuthService } from '../../providers/auth-service/auth-service';
 import { UsersService } from '../../providers/users-service/users-service';
+import firebase from 'firebase';
 
 /**
  * Generated class for the MainPage page.
@@ -24,28 +25,59 @@ export class MainPage implements OnInit {
     uid: ""
   }
   cachedPosts: Post[];
+  viewPosts: Post[];
+  datePosts: IPost[] = [];
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
     private menu: MenuController,
     private postSvc: PostsService,
     private authSvc: AuthService,
     private loadCtrl: LoadingController,
-    private usersSvc:UsersService) {
+    private usersSvc: UsersService) {
   }
   async ngOnInit() {
-    let load = this.loadCtrl.create();
+    let load = this.loadCtrl.create({
+      content:'please wait ...',
+      spinner: 'crescent',
+    });
     load.present();
     try {
-      await this.usersSvc.getUsers();
-      await this.usersSvc.getFriends();
       await this.postSvc.getPosts();
       this.cachedPosts = await this.postSvc.getCachedPosts();
+      this.cachedPosts.forEach(i => {
+        let date = new Date(i.dateTime);
+        let ob: IPost = {
+          author: i.author,
+          dateTime: date,
+          text: i.text,
+          uid: i.uid
+        }
+        this.datePosts.push(ob);
+      })
+      this.datePosts = this.datePosts.sort((a: IPost, b: IPost) => {
+        return a.dateTime.getTime() - b.dateTime.getTime();
+      });
+      this.cachedPosts = [];
+      this.datePosts.forEach(i => {
+        let date = new Date(i.dateTime);
+        let ob: Post = {
+          author: i.author,
+          dateTime: date.toUTCString(),
+          text: i.text,
+          uid: i.uid
+        }
+        this.cachedPosts.push(ob);
+      })
+      this.cachedPosts.reverse()
     } catch (err) {
       console.log(err)
     } finally {
-      load.dismiss();
+    load.dismiss();    
     }
   }
+
+  
+
   sharePost() {
     let load = this.loadCtrl.create();
     load.present();

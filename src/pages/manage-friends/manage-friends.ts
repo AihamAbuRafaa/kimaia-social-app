@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { IonicPage, NavController, NavParams, LoadingController } from 'ionic-angular';
-import { UsersService, User } from '../../providers/users-service/users-service';
+import { UsersService, User, Friend } from '../../providers/users-service/users-service';
 
 /**
  * Generated class for the ManageFriendsPage page.
@@ -16,7 +16,7 @@ import { UsersService, User } from '../../providers/users-service/users-service'
 })
 export class ManageFriendsPage implements OnInit {
   users: User[] = [];
-  friends:any[]=[];
+  friends:Friend[]=[];
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
     private usersSvc: UsersService,
@@ -27,7 +27,7 @@ export class ManageFriendsPage implements OnInit {
     let load = this.loadCtrl.create();
     load.present();
     try {
-      this.users = await this.usersSvc.getCahcedUsers();
+      this.users = await this.usersSvc.getCachedUsersWithoutFriends();
       this.friends=await this.usersSvc.friends;
       this.users=this.users.filter(i=>{
         let uid =i.uid;
@@ -35,19 +35,23 @@ export class ManageFriendsPage implements OnInit {
         this.friends.forEach(d=>{
           if(uid==d.friendId){
             flag=false;
-          }else
-          {
-            flag=true;
+            //break;
           }
         })
         return flag;
       })
       this.friends=this.friends.filter(i=>{
-        if(i.isAccept==false&&i.isRequest==true)
+        if(i.isAccept==false)
         {
-          return true;
-        }
-        else
+          if(i.isRequest==true)
+          {
+            return true;
+          }
+          else
+          {
+            return false;
+          }
+        }else
         {
           return false;
         }
@@ -71,7 +75,7 @@ export class ManageFriendsPage implements OnInit {
       load.dismiss();
     }
   }
-  acceptOrRejectRequest(friend:User,flag:boolean){
+  acceptOrRejectRequest(friend:Friend,flag:boolean){
     if(flag==true)//accept
     {
       this.usersSvc.acceptFriend(friend)
@@ -79,6 +83,7 @@ export class ManageFriendsPage implements OnInit {
     {
       this.usersSvc.rejectFriend(friend)
     }
+    this.friends=this.friends.filter(i=>friend.friendId!=i.friendId)
   }
 
 }

@@ -33,10 +33,9 @@
     
         </ion-card>
       </div>
-    <ion-card *ngFor="let post of cachedPosts">
+    <ion-card *ngFor="let post of cachedPosts;">
         <ion-item>
           <h2>{{post.author}}</h2>
-          <p>{{post.dateTime}}</p>
         </ion-item>
         <ion-card-content>
           <p>{{post.text}}</p>
@@ -44,7 +43,7 @@
         <ion-row>
           <ion-col align-self-center text-right>
             <ion-note>
-              11h ago
+              {{post.dateTime}}
             </ion-note>
           </ion-col>
         </ion-row>

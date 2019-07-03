@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, LoadingController, AlertController } from 'ionic-angular';
 import { AuthService } from '../../providers/auth-service/auth-service';
-import { AngularFireDatabase } from '@angular/fire/database';
+import firebase from 'firebase'
 import { NgForm } from '@angular/forms';
 
 /**
@@ -21,8 +21,7 @@ export class RegisterPage {
     public navParams: NavParams,
     private authSVC:AuthService,
     private loadingCtrl:LoadingController,
-    private alerCtrl : AlertController,
-    private adb: AngularFireDatabase,) {
+    private alerCtrl : AlertController,) {
  }
 
 
@@ -35,7 +34,7 @@ export class RegisterPage {
    this.authSVC.signup(form.value.email,form.value.password).then(
      data=>{
        loading.dismiss();
-       let dataa = this.adb.list("/users/").push({
+       let dataa = firebase.database().ref("/users/").push({
          uid:data.user.uid,
          name:form.value.fullname
        });
