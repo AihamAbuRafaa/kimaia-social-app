@@ -1,10 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { IonicPage, NavController, NavParams, MenuController, LoadingController, SelectPopover } from 'ionic-angular';
+import { Component } from '@angular/core';
+import { IonicPage, NavController, NavParams,LoadingController, } from 'ionic-angular';
 import { PostsService, Post, IPost } from '../../providers/posts-service/posts-service';
 import { AuthService } from '../../providers/auth-service/auth-service';
-import { UsersService } from '../../providers/users-service/users-service';
-import firebase from 'firebase';
-import { isRightSide } from 'ionic-angular/umd/util/util';
 
 /**
  * Generated class for the MainPage page.
@@ -29,11 +26,9 @@ export class MainPage{
   datePosts: IPost[] = [];
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
-    private menu: MenuController,
     private postSvc: PostsService,
     private authSvc: AuthService,
-    private loadCtrl: LoadingController,
-    private usersSvc: UsersService) {
+    private loadCtrl: LoadingController,) {
   }
   
   async ionViewDidEnter() {
