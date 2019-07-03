@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams, LoadingController, AlertController
 import { AuthService } from '../../providers/auth-service/auth-service';
 import firebase from 'firebase'
 import { NgForm } from '@angular/forms';
+import { UsersService } from '../../providers/users-service/users-service';
 
 /**
  * Generated class for the RegisterPage page.
@@ -21,6 +22,7 @@ export class RegisterPage {
     public navParams: NavParams,
     private authSVC:AuthService,
     private loadingCtrl:LoadingController,
+    private userSvc:UsersService,
     private alerCtrl : AlertController,) {
  }
 
@@ -38,6 +40,11 @@ export class RegisterPage {
          uid:data.user.uid,
          name:form.value.fullname
        });
+       this.userSvc.addUser({
+        uid:data.user.uid,
+        name:form.value.fullname
+       })
+       this.userSvc.addUserKey(dataa.key)
      })
      .catch(error=>{
        loading.dismiss();
@@ -48,6 +55,7 @@ export class RegisterPage {
        });
        alert.present();
      });
+     this.authSVC.name=form.value.fullname;
  }
 
  // go to login page

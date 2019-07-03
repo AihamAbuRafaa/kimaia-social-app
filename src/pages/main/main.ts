@@ -32,7 +32,7 @@ export class MainPage{
     private loadCtrl: LoadingController,) {
   }
   
-  async ionViewDidEnter() {
+   ionViewDidEnter() {
      // i used this function because when i return from managefriends page to this page this function called to add posts of the accepted new friend
     let load = this.loadCtrl.create({
       content:'please wait ...',
@@ -70,14 +70,13 @@ export class MainPage{
       this.cachedPosts.reverse()
     } catch (err) {
       console.log(err)
-      
+      let alert = this.alertCtrl.create({
+        subTitle: 'Error while getting posts',
+        buttons: ['Dismiss']
+      });
+      alert.present();
     } finally {
     load.dismiss();    
-    let alert = this.alertCtrl.create({
-      subTitle: 'Error while getting posts',
-      buttons: ['Dismiss']
-    });
-    alert.present();
     }
   }
 
@@ -97,13 +96,13 @@ export class MainPage{
       }
     } catch (err) {
       console.log(err)
-    } finally {
-      load.dismiss();
       let alert = this.alertCtrl.create({
         subTitle: 'Error while sharing post',
         buttons: ['Dismiss']
       });
       alert.present();
+    } finally {
+      load.dismiss();
     }
   }
 }

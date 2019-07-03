@@ -41,6 +41,13 @@ export class UsersService {
     }
 
   }
+  addUser(user:User){
+    this.users.push(user)
+  }
+  addUserKey(key:string){
+    this.usersKeys.push(key)
+  }
+
   async getUsers() {
     this.uid = this.authSvc.uid;
     try {
@@ -51,6 +58,9 @@ export class UsersService {
         var itemVal = item.val();
         this.users.push(itemVal)// add user to cache
         this.usersKeys.push(item.key);// add id of user in database to the cache
+          if (itemVal.uid == this.user.uid) {
+            this.user.name = itemVal.name
+          }
       });
     } catch (err) {
       console.log(err)

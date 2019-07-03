@@ -11,7 +11,7 @@
     </div>
 
     <!-- Login form -->
-    <form #form="ngForm" (submit)="register(form)" class="list-form">
+    <form #form="ngForm" (submit)="form.valid&&register(form)" class="list-form">
       <ion-item>
         <ion-label >
           <ion-icon name="person" item-start class="text-primary"></ion-icon>

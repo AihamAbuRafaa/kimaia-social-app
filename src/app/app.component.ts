@@ -40,7 +40,6 @@ export class MyApp {
     try {
       await this.userSvc.getUsers();
       this.getUser();
-      this.getName();
     } catch (err) {
       console.log(err)
     }
@@ -50,28 +49,13 @@ export class MyApp {
     this.nav.setRoot('LoginPage')
   }
 
-  async getName() {
-      let snapshot=await firebase.database().ref('/users/').once('value');
-        snapshot.forEach(item => {
-          let i = item.val()
-          if (this.user) {
-            if (i.uid == this.user.uid) {
-              this.name = i.name
-              this.authSVC.name = i.name
-            }
-          }
-        });      
-      this.authSVC.name = this.name;
-
-  }
-
   getUser() {
     firebase.auth().onAuthStateChanged(async user => {
       if (user) {
         this.isAuthenticated = true;
         this.user = user;
         this.authSVC.uid = user.uid;
-        this.userSvc.uid = user.uid
+        this.userSvc.uid = user.uid;
         await this.userSvc.getFriends();
         this.rootPage = 'MainPage';
       }

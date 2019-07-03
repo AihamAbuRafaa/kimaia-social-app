@@ -55,12 +55,12 @@ export class ManageFriendsPage implements OnInit {
       })
     } catch (err) {
       console.log(err)
-    } finally {
-      load.dismiss();
       let alert = this.alertCtrl.create({
         subTitle: 'Error while getting friends',
         buttons: ['Dismiss']
       });
+    } finally {
+      load.dismiss();
     }
   }
 
@@ -72,13 +72,13 @@ export class ManageFriendsPage implements OnInit {
       this.users = this.users.filter(i => i.uid != friend.uid)
     } catch (err) {
       console.log(err)
-    } finally {
-      load.dismiss();
       let alert = this.alertCtrl.create({
         subTitle: 'Error while adding a friend',
         buttons: ['Dismiss']
       });
       alert.present();
+    } finally {
+      load.dismiss();
     }
   }
   acceptOrRejectRequest(friend: Friend, flag: boolean) {
@@ -95,13 +95,13 @@ export class ManageFriendsPage implements OnInit {
       this.friends = this.friends.filter(i => friend.friendId != i.friendId)
     } catch (err) {
       console.log(err)
-    }finally{
-      load.dismiss();
       let alert = this.alertCtrl.create({
         subTitle: 'Error while accepting/rejecting a friend',
         buttons: ['Dismiss']
       });
       alert.present();
+    }finally{
+      load.dismiss();
     }
   }
 

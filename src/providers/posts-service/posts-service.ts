@@ -11,7 +11,6 @@ import { UsersService } from '../users-service/users-service';
 @Injectable()
 export class PostsService {
   cachedPosts: Post[] = [];
-  i = 0;
   constructor(private authSvc: AuthService, private usersSvc: UsersService) {
 
   }
@@ -44,6 +43,7 @@ export class PostsService {
               if (user.posts) {
                 const values = Object.keys(user.posts).map(key => user.posts[key]);
                 //I have used this because object.values dosent in es2015 and I'am used es2015
+                console.log(values)
                 values.forEach(post => {
                   this.cachedPosts.push(post);
                 })
