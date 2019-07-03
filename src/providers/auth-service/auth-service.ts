@@ -22,7 +22,7 @@ export class AuthService {
       messagingSenderId: "143615907120",
       appId: "1:143615907120:web:5c5b59b753ae923d"
     })
-    
+
   }
 
   signup(email: string, password: string) {
@@ -34,23 +34,10 @@ export class AuthService {
   }
 
   logout() {
-    firebase.auth().signOut();
+    try {
+      firebase.auth().signOut();
+    } catch (err) {
+      console.log(err)
+    }
   }
-
-  signinWithFacebook() {
-    let provider = new firebase.auth.FacebookAuthProvider();
-
-    firebase.auth().signInWithRedirect(provider).then(() => {
-      firebase.auth().getRedirectResult().then((result) => {
-        alert(JSON.stringify(result));
-
-      }).catch(function (error) {
-        alert(JSON.stringify(error))
-      })
-    })
-  }
-  resetPassword(email: string) {
-    return firebase.auth().sendPasswordResetEmail(email);
-  }
-
 }

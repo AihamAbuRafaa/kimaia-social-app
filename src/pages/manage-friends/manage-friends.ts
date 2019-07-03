@@ -16,7 +16,7 @@ import { UsersService, User, Friend } from '../../providers/users-service/users-
 })
 export class ManageFriendsPage implements OnInit {
   users: User[] = [];
-  friends:Friend[]=[];
+  friends: Friend[] = [];
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
     private usersSvc: UsersService,
@@ -28,31 +28,27 @@ export class ManageFriendsPage implements OnInit {
     load.present();
     try {
       this.users = await this.usersSvc.getCachedUsersWithoutFriends();
-      this.friends=await this.usersSvc.friends;
-      this.users=this.users.filter(i=>{
-        let uid =i.uid;
-        let flag=true;
-        this.friends.forEach(d=>{
-          if(uid==d.friendId){
-            flag=false;
+      this.friends = await this.usersSvc.friends;
+      this.users = this.users.filter(i => {
+        let uid = i.uid;
+        let flag = true;
+        this.friends.forEach(d => {
+          if (uid == d.friendId) {
+            flag = false;
             //break;
           }
         })
         return flag;
       })
-      this.friends=this.friends.filter(i=>{
-        if(i.isAccept==false)
-        {
-          if(i.isRequest==true)
-          {
+      this.friends = this.friends.filter(i => {
+        if (i.isAccept == false) {
+          if (i.isRequest == true) {
             return true;
           }
-          else
-          {
+          else {
             return false;
           }
-        }else
-        {
+        } else {
           return false;
         }
       })
@@ -75,15 +71,19 @@ export class ManageFriendsPage implements OnInit {
       load.dismiss();
     }
   }
-  acceptOrRejectRequest(friend:Friend,flag:boolean){
-    if(flag==true)//accept
-    {
-      this.usersSvc.acceptFriend(friend)
-    }else //reject
-    {
-      this.usersSvc.rejectFriend(friend)
+  acceptOrRejectRequest(friend: Friend, flag: boolean) {
+    try {
+      if (flag == true)//accept
+      {
+        this.usersSvc.acceptFriend(friend)
+      } else //reject
+      {
+        this.usersSvc.rejectFriend(friend)
+      }
+      this.friends = this.friends.filter(i => friend.friendId != i.friendId)
+    } catch (err) {
+      console.log(err)
     }
-    this.friends=this.friends.filter(i=>friend.friendId!=i.friendId)
   }
 
 }

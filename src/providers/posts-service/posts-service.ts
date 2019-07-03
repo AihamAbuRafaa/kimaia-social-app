@@ -33,24 +33,28 @@ export class PostsService {
   }
 
   getPosts() {
-    let friends = this.usersSvc.getCachedFriends()
-    let users = this.usersSvc.getChacedUsers()
-    friends.forEach(friend => {
-      users.forEach(user => {
-        if (user) {
-          if (friend.friendId == user.uid && friend.isAccept == true) {
-            if (user.posts) {
-              Object.values(user.posts).forEach(post => {
-                this.cachedPosts.push(post);
-              })
+    try {
+      this.cachedPosts=[]
+      let friends = this.usersSvc.getCachedFriends()
+      let users = this.usersSvc.getChacedUsers()
+      friends.forEach(friend => {
+        users.forEach(user => {
+          if (user) {
+            if (friend.friendId == user.uid && friend.isAccept == true) {
+              if (user.posts) {
+                Object.values(user.posts).forEach(post => {
+                  this.cachedPosts.push(post);
+                })
+              }
             }
           }
-        }
-      });
-    })
-
+        });
+      })
+    } catch (err) {
+      console.log(err)
+    }
   }
-  async getCachedPosts() {
+  getCachedPosts() {
     let uid = this.authSvc.uid;
     return this.cachedPosts;
   }

@@ -37,17 +37,21 @@ export class MyApp {
 
   }
   async init() {
-    await this.userSvc.getUsers();
-    this.getUser();
+    try {
+      await this.userSvc.getUsers();
+      this.getUser();
+      this.getName();
+    } catch (err) {
+      console.log(err)
+    }
   }
   logout() {
     this.authSVC.logout();
     this.nav.setRoot('LoginPage')
   }
 
-  getName() {
-    return new Promise((resolve, reject) => {
-      firebase.database().ref('/users/').once('value').then(snapshot => {
+  async getName() {
+      let snapshot=await firebase.database().ref('/users/').once('value');
         snapshot.forEach(item => {
           let i = item.val()
           if (this.user) {
@@ -56,11 +60,9 @@ export class MyApp {
               this.authSVC.name = i.name
             }
           }
-        });
-      });
+        });      
       this.authSVC.name = this.name;
-      resolve(this.name)
-    })
+
   }
 
   getUser() {
@@ -71,7 +73,6 @@ export class MyApp {
         this.authSVC.uid = user.uid;
         this.userSvc.uid = user.uid
         await this.userSvc.getFriends();
-        this.getName();
         this.rootPage = 'MainPage';
       }
       else {

@@ -24,16 +24,20 @@ export class UsersService {
   constructor(private authSvc: AuthService) {
   }
   async getFriends() {
-    let index = this.users.findIndex(i => i.uid == this.uid)
-    let snapshot = await firebase.database().ref("/users/" + this.usersKeys[index] + "/friends/").once('value');
-    this.friends = []
-    this.friendsKeys=[]
-    snapshot.forEach(item => {
-      var itemVal = item.val();
-      this.friends.push(itemVal)
-      this.friendsKeys.push(item.key)
-    });
-    
+    try {
+      let index = this.users.findIndex(i => i.uid == this.uid)
+      let snapshot = await firebase.database().ref("/users/" + this.usersKeys[index] + "/friends/").once('value');
+      this.friends = []
+      this.friendsKeys = []
+      snapshot.forEach(item => {
+        var itemVal = item.val();
+        this.friends.push(itemVal)
+        this.friendsKeys.push(item.key)
+      });
+    } catch (err) {
+      console.log(err)
+    }
+
   }
   async getUsers() {
     this.uid = this.authSvc.uid;
@@ -50,8 +54,8 @@ export class UsersService {
       console.log(err)
     }
   }
-  getChacedUsers(){
-    return this.users.filter(i=>i.uid!=this.uid)
+  getChacedUsers() {
+    return this.users.filter(i => i.uid != this.uid)
   }
   getCachedUsersWithoutFriends() {
     return this.users.filter(user => {
@@ -98,10 +102,10 @@ export class UsersService {
       // add friend to the cache array
       this.friendsKeys.push(data.key)
       this.friends.push({
-        friendId:friendId,
-        friendName:friendName,
-        isAccept:isAccept,
-        isRequest:isRequest
+        friendId: friendId,
+        friendName: friendName,
+        isAccept: isAccept,
+        isRequest: isRequest
       })
     } catch (err) {
       console.log(err)
@@ -137,7 +141,7 @@ export class UsersService {
         isRequest
       });
       //add friend to cache array
-      this.friends[friendIndex].isAccept=true;
+      this.friends[friendIndex].isAccept = true;
     } catch (err) {
       console.log(err)
     }

@@ -4,6 +4,7 @@ import { PostsService, Post, IPost } from '../../providers/posts-service/posts-s
 import { AuthService } from '../../providers/auth-service/auth-service';
 import { UsersService } from '../../providers/users-service/users-service';
 import firebase from 'firebase';
+import { isRightSide } from 'ionic-angular/umd/util/util';
 
 /**
  * Generated class for the MainPage page.
@@ -17,7 +18,7 @@ import firebase from 'firebase';
   selector: 'page-main',
   templateUrl: 'main.html',
 })
-export class MainPage implements OnInit {
+export class MainPage{
   newPost: Post = {
     dateTime: "",
     author: "",
@@ -25,7 +26,6 @@ export class MainPage implements OnInit {
     uid: ""
   }
   cachedPosts: Post[];
-  viewPosts: Post[];
   datePosts: IPost[] = [];
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
@@ -35,15 +35,18 @@ export class MainPage implements OnInit {
     private loadCtrl: LoadingController,
     private usersSvc: UsersService) {
   }
-  async ngOnInit() {
+  
+  async ionViewDidEnter() {
     let load = this.loadCtrl.create({
       content:'please wait ...',
       spinner: 'crescent',
     });
     load.present();
     try {
-      await this.postSvc.getPosts();
-      this.cachedPosts = await this.postSvc.getCachedPosts();
+      this.cachedPosts=[]
+      this.datePosts=[]
+      this.postSvc.getPosts();
+      this.cachedPosts = this.postSvc.getCachedPosts();
       this.cachedPosts.forEach(i => {
         let date = new Date(i.dateTime);
         let ob: IPost = {
