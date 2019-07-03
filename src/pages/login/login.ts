@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { IonicPage, NavController, NavParams, MenuController, LoadingController, AlertController, ToastController } from 'ionic-angular';
 import { AuthService } from '../../providers/auth-service/auth-service';
 import { NgForm } from '@angular/forms';
+import { UsersService } from '../../providers/users-service/users-service';
 
 /**
  * Generated class for the LoginPage page.
@@ -20,6 +21,7 @@ export class LoginPage implements OnInit {
     public forgotCtrl: AlertController,
     private loadingCtrl: LoadingController,
     private authSVC: AuthService,
+    private userSvc:UsersService,
     public menu: MenuController,
     public toastCtrl: ToastController) {
   }
@@ -32,7 +34,7 @@ export class LoginPage implements OnInit {
   }
 
   // login and go to home page
-  login(form: NgForm) {
+  async login(form: NgForm) {
 
     const loading = this.loadingCtrl.create({
       content: "Signing you in...",
@@ -52,6 +54,5 @@ export class LoginPage implements OnInit {
         });
         alert.present();
       });
-
   }
 }

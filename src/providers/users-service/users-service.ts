@@ -55,11 +55,13 @@ export class UsersService {
       this.users = []
       this.usersKeys = [];
       snapshot.forEach(item => {
+        
         var itemVal = item.val();
         this.users.push(itemVal)// add user to cache
         this.usersKeys.push(item.key);// add id of user in database to the cache
-          if (itemVal.uid == this.user.uid) {
+          if (itemVal.uid == this.authSvc.uid) {
             this.user.name = itemVal.name
+            this.user.uid=this.authSvc.uid
           }
       });
     } catch (err) {

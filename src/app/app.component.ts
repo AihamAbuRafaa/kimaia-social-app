@@ -56,6 +56,7 @@ export class MyApp {
         this.user = user;
         this.authSVC.uid = user.uid;
         this.userSvc.uid = user.uid;
+        await this.userSvc.getUsers();
         await this.userSvc.getFriends();
         this.rootPage = 'MainPage';
       }

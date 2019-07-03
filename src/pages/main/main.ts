@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams,LoadingController, AlertController, } from 'ionic-angular';
 import { PostsService, Post, IPost } from '../../providers/posts-service/posts-service';
 import { AuthService } from '../../providers/auth-service/auth-service';
+import { UsersService } from '../../providers/users-service/users-service';
 
 /**
  * Generated class for the MainPage page.
@@ -29,10 +30,11 @@ export class MainPage{
     public navParams: NavParams,
     private postSvc: PostsService,
     private authSvc: AuthService,
+    private userSvc:UsersService,
     private loadCtrl: LoadingController,) {
   }
   
-   ionViewDidEnter() {
+   async ionViewDidEnter() {
      // i used this function because when i return from managefriends page to this page this function called to add posts of the accepted new friend
     let load = this.loadCtrl.create({
       content:'please wait ...',
@@ -61,7 +63,7 @@ export class MainPage{
         let date = new Date(i.dateTime);
         let ob: Post = {
           author: i.author,
-          dateTime: date.toUTCString(),
+          dateTime: date.toString().split('G')[0],
           text: i.text,
           uid: i.uid
         }
@@ -88,9 +90,10 @@ export class MainPage{
     try {
       if (this.newPost.text) {
         let dateTime = new Date().toString();
+        console.log(dateTime)
         this.newPost.dateTime = dateTime;
-        this.newPost.uid = this.authSvc.uid;
-        this.newPost.author = this.authSvc.name;
+        this.newPost.uid = this.userSvc.user.uid;
+        this.newPost.author = this.userSvc.user.name;
         this.postSvc.sharePost(this.newPost);
         this.newPost.text = ""
       }
