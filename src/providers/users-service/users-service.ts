@@ -23,16 +23,18 @@ export class UsersService {
   };
   constructor(private authSvc: AuthService) {
   }
+
   async getFriends() {
     try {
       let index = this.users.findIndex(i => i.uid == this.uid)
       let snapshot = await firebase.database().ref("/users/" + this.usersKeys[index] + "/friends/").once('value');
+      //get friends request
       this.friends = []
       this.friendsKeys = []
       snapshot.forEach(item => {
         var itemVal = item.val();
-        this.friends.push(itemVal)
-        this.friendsKeys.push(item.key)
+        this.friends.push(itemVal)//add friends
+        this.friendsKeys.push(item.key)//add id of friendship in database
       });
     } catch (err) {
       console.log(err)
@@ -47,8 +49,8 @@ export class UsersService {
       this.usersKeys = [];
       snapshot.forEach(item => {
         var itemVal = item.val();
-        this.users.push(itemVal)
-        this.usersKeys.push(item.key);
+        this.users.push(itemVal)// add user to cache
+        this.usersKeys.push(item.key);// add id of user in database to the cache
       });
     } catch (err) {
       console.log(err)
@@ -57,7 +59,7 @@ export class UsersService {
   getChacedUsers() {
     return this.users.filter(i => i.uid != this.uid)
   }
-  getCachedUsersWithoutFriends() {
+  getCachedUsersWithoutFriends() { 
     return this.users.filter(user => {
       let flag = true;
       if (user.uid == this.uid) {
@@ -81,6 +83,7 @@ export class UsersService {
       let friendId = this.uid;
       let isAccept = false;
       let isRequest = true;
+      // add friendship to friend
       let data = await firebase.database().ref("/users/" + this.usersKeys[index] + "/friends/").push({
         friendId,
         friendName,
@@ -93,6 +96,7 @@ export class UsersService {
       friendId = friend.uid;
       isRequest = false;
       isAccept = false;
+      // add friendship to the user
       let dat = await firebase.database().ref("/users/" + this.usersKeys[index] + "/friends/" + data.key).set({
         friendId,
         friendName,
@@ -122,6 +126,7 @@ export class UsersService {
       friendId = this.uid;
       let isAccept = true;
       let isRequest = false;
+      // update accept true to friend
       let data = await firebase.database().ref("/users/" + this.usersKeys[index] + "/friends/" + this.friendsKeys[friendIndex]).set({
         friendId,
         friendName,
@@ -134,6 +139,7 @@ export class UsersService {
       friendId = friend.friendId;
       isRequest = true;
       isAccept = true;
+      // update accept true to the user
       let dat = await firebase.database().ref("/users/" + this.usersKeys[index] + "/friends/" + this.friendsKeys[friendIndex]).set({
         friendId,
         friendName,
@@ -148,6 +154,7 @@ export class UsersService {
   }
   async rejectFriend(friend: any) {
     try {
+      //remove the friendship in database
       let index = this.users.findIndex(i => i.uid == friend.friendId)
       let friendIndex = this.friends.findIndex(i => i.friendId == friend.friendId)
       let data = await firebase.database().ref("/users/" + this.usersKeys[index] + "/friends/" + this.friendsKeys[friendIndex]).remove()

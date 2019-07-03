@@ -21,7 +21,7 @@ export class PostsService {
       let usersKeys = this.usersSvc.usersKeys;
       let users = this.usersSvc.users;
       let index = users.findIndex(i => i.uid == this.authSvc.uid)
-      let data = await firebase.database().ref("users/" + usersKeys[index] + "/posts/").push({
+      let data = await firebase.database().ref("users/" + usersKeys[index] + "/posts/").push({ //request to share post
         author: post.author,
         text: post.text,
         dateTime: post.dateTime,
@@ -40,9 +40,10 @@ export class PostsService {
       friends.forEach(friend => {
         users.forEach(user => {
           if (user) {
-            if (friend.friendId == user.uid && friend.isAccept == true) {
+            if (friend.friendId == user.uid && friend.isAccept == true) { //if user is my friend add his posts
               if (user.posts) {
-                Object.values(user.posts).forEach(post => {
+                const values = Object.keys(user.posts).map(key => user.posts[key]);
+                values.forEach(post => {
                   this.cachedPosts.push(post);
                 })
               }
@@ -66,6 +67,7 @@ export interface Post {
   text: string;
   dateTime: string;
 }
+//the diffrence is one with dateTime as string and the othe with Date becaues there's not type date in the database
 export interface IPost {
   uid: string;
   author: string;

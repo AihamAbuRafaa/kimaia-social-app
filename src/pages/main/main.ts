@@ -37,6 +37,7 @@ export class MainPage{
   }
   
   async ionViewDidEnter() {
+     // i used this function because when i return from managefriends page to this page this function called to add posts of the accepted new friend
     let load = this.loadCtrl.create({
       content:'please wait ...',
       spinner: 'crescent',
@@ -58,7 +59,7 @@ export class MainPage{
         this.datePosts.push(ob);
       })
       this.datePosts = this.datePosts.sort((a: IPost, b: IPost) => {
-        return a.dateTime.getTime() - b.dateTime.getTime();
+        return a.dateTime.getTime() - b.dateTime.getTime(); // sort the array by time
       });
       this.cachedPosts = [];
       this.datePosts.forEach(i => {
