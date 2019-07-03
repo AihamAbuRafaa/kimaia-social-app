@@ -57,6 +57,10 @@ export class ManageFriendsPage implements OnInit {
       console.log(err)
     } finally {
       load.dismiss();
+      let alert = this.alertCtrl.create({
+        subTitle: 'Error while getting friends',
+        buttons: ['Dismiss']
+      });
     }
   }
 

@@ -73,6 +73,11 @@ export class MainPage{
       
     } finally {
     load.dismiss();    
+    let alert = this.alertCtrl.create({
+      subTitle: 'Error while getting posts',
+      buttons: ['Dismiss']
+    });
+    alert.present();
     }
   }
 
