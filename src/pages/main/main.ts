@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams,LoadingController, } from 'ionic-angular';
+import { IonicPage, NavController, NavParams,LoadingController, AlertController, } from 'ionic-angular';
 import { PostsService, Post, IPost } from '../../providers/posts-service/posts-service';
 import { AuthService } from '../../providers/auth-service/auth-service';
 
@@ -25,6 +25,7 @@ export class MainPage{
   cachedPosts: Post[];
   datePosts: IPost[] = [];
   constructor(public navCtrl: NavController,
+    public alertCtrl:AlertController,
     public navParams: NavParams,
     private postSvc: PostsService,
     private authSvc: AuthService,
@@ -35,7 +36,6 @@ export class MainPage{
      // i used this function because when i return from managefriends page to this page this function called to add posts of the accepted new friend
     let load = this.loadCtrl.create({
       content:'please wait ...',
-      spinner: 'crescent',
     });
     load.present();
     try {
@@ -70,6 +70,7 @@ export class MainPage{
       this.cachedPosts.reverse()
     } catch (err) {
       console.log(err)
+      
     } finally {
     load.dismiss();    
     }
@@ -93,6 +94,11 @@ export class MainPage{
       console.log(err)
     } finally {
       load.dismiss();
+      let alert = this.alertCtrl.create({
+        subTitle: 'Error while sharing post',
+        buttons: ['Dismiss']
+      });
+      alert.present();
     }
   }
 }

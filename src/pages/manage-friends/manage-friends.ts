@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { IonicPage, NavController, NavParams, LoadingController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, LoadingController, AlertController } from 'ionic-angular';
 import { UsersService, User, Friend } from '../../providers/users-service/users-service';
 
 /**
@@ -19,6 +19,7 @@ export class ManageFriendsPage implements OnInit {
   friends: Friend[] = [];
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
+    private alertCtrl:AlertController,
     private usersSvc: UsersService,
     private loadCtrl: LoadingController) {
   }
@@ -69,9 +70,16 @@ export class ManageFriendsPage implements OnInit {
       console.log(err)
     } finally {
       load.dismiss();
+      let alert = this.alertCtrl.create({
+        subTitle: 'Error while adding a friend',
+        buttons: ['Dismiss']
+      });
+      alert.present();
     }
   }
   acceptOrRejectRequest(friend: Friend, flag: boolean) {
+    let load = this.loadCtrl.create();
+    load.present();
     try {
       if (flag == true)//accept
       {
@@ -83,6 +91,13 @@ export class ManageFriendsPage implements OnInit {
       this.friends = this.friends.filter(i => friend.friendId != i.friendId)
     } catch (err) {
       console.log(err)
+    }finally{
+      load.dismiss();
+      let alert = this.alertCtrl.create({
+        subTitle: 'Error while accepting/rejecting a friend',
+        buttons: ['Dismiss']
+      });
+      alert.present();
     }
   }
 

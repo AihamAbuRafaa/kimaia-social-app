@@ -43,6 +43,7 @@ export class PostsService {
             if (friend.friendId == user.uid && friend.isAccept == true) { //if user is my friend add his posts
               if (user.posts) {
                 const values = Object.keys(user.posts).map(key => user.posts[key]);
+                //I have used this because object.values dosent in es2015 and I'am used es2015
                 values.forEach(post => {
                   this.cachedPosts.push(post);
                 })
