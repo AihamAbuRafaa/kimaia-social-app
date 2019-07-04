@@ -90,7 +90,6 @@ export class MainPage{
     try {
       if (this.newPost.text) {
         let dateTime = new Date().toString();
-        console.log(dateTime)
         this.newPost.dateTime = dateTime;
         this.newPost.uid = this.userSvc.user.uid;
         this.newPost.author = this.userSvc.user.name;

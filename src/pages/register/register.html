@@ -1,20 +1,19 @@
 <!-- -->
-<ion-content class="auth-page">
-  <div class="login-content">
+<ion-content >
+  <div >
 
     <!-- Logo -->
     <div padding text-center>
-      <div class="logo"></div>
-      <h2 ion-text class="text-primary">
+      <h2 ion-text>
           <strong>Social</strong> app
       </h2>
     </div>
 
     <!-- Login form -->
-    <form #form="ngForm" (submit)="form.valid&&register(form)" class="list-form">
+    <form #form="ngForm" (submit)="form.valid&&register(form)" >
       <ion-item>
         <ion-label >
-          <ion-icon name="person" item-start class="text-primary"></ion-icon>
+          <ion-icon name="person" item-start ></ion-icon>
           Full Name
         </ion-label>
         <ion-input name="fullname" ngModel type="text" required></ion-input>
@@ -22,7 +21,7 @@
 
       <ion-item>
         <ion-label >
-          <ion-icon name="mail" item-start class="text-primary"></ion-icon>
+          <ion-icon name="mail" item-start ></ion-icon>
           Email
         </ion-label>
         <ion-input name="email" ngModel type="email" required></ion-input>
@@ -30,7 +29,7 @@
 
       <ion-item>
         <ion-label >
-          <ion-icon name="lock"  item-start class="text-primary"></ion-icon>
+          <ion-icon name="lock"  item-start ></ion-icon>
           Password
         </ion-label>
         <ion-input name="password" ngModel type="password" required></ion-input>
@@ -42,7 +41,6 @@
     </form>
 
     
-    <!-- Other links -->
     <div text-center margin-top>
       <span ion-text color="primary" tappable (click)="login()">I have an account</span>
     </div>

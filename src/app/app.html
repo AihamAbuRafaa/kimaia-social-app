@@ -1,17 +1,17 @@
 <ion-menu [content]="content" type="overlay" >
   <ion-header>
-    <ion-toolbar class="user-profile" color="primary">
+    <ion-toolbar  color="primary">
       <ion-grid>
-        <ion-row no-padding class="other-data">
-          <ion-col *ngIf="isAuthenticated" no-padding class="column">
+        <ion-row no-padding>
+          <ion-col *ngIf="isAuthenticated" no-padding >
             <button ion-button icon-left small full color="danger" menuClose (click)="logout()">
               <ion-icon name="log-out"></ion-icon>
               Log Out
             </button>
           </ion-col>
         </ion-row>
-        <ion-row no-padding class="other-data" color="primary">
-          <ion-col *ngIf="isAuthenticated" no-padding class="column">
+        <ion-row no-padding color="primary">
+          <ion-col *ngIf="isAuthenticated" no-padding >
             <button ion-button icon-left small full color="light" menuClose (click)="manageFriends()">
               <ion-icon name="contacts"></ion-icon>
               Manage friends
